@@ -7,7 +7,7 @@ How to use it: clone the repo, install Flask and psutil, set your ntfy topic in 
 
 A lightweight, real-time monitoring dashboard for a self-hosted Linux server. Built to keep an eye on a 24/7 Ubuntu box at a glance — system health, network throughput, running processes, scheduled-job health, and VPN status — with push alerts when something needs attention.
 
-![Homeserver Dashboard](screenshot.png)
+
 
 ## What it does
 
