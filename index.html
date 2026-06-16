@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Homeserver Dashboard</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23070b11'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%2300ff88' stroke-width='3'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#070b11;color:#c9d1d9;font-family:'JetBrains Mono','Courier New',monospace;padding:16px;min-height:100vh}
+.card{background:#0d1117;border:1px solid #1e2d40;border-radius:8px;padding:14px;margin-bottom:11px}
+.chdr{display:flex;align-items:center;gap:7px;margin-bottom:13px}
+.cdot{color:#00ff88;font-size:9px}
+.ctxt{color:#8b949e;font-size:10px;text-transform:uppercase;letter-spacing:.12em;font-weight:700}
+.cline{flex:1;height:1px;background:#1e2d40}
+.gauges{display:flex;justify-content:space-around;flex-wrap:wrap;gap:10px;margin-bottom:12px}
+.gw{display:flex;flex-direction:column;align-items:center;gap:5px}
+.grel{position:relative;width:80px;height:80px}
+.gcen{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.gval{font-size:12px;font-weight:700}
+.glbl{color:#8b949e;font-size:8px;text-transform:uppercase;letter-spacing:.12em}
+.srow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px}
+.spill{background:#070b11;border-radius:5px;padding:7px 8px;text-align:center}
+.slbl{color:#8b949e;font-size:8px;text-transform:uppercase;letter-spacing:.1em}
+.sval{color:#00ff88;font-size:12px;font-weight:700;margin-top:3px}
+.tc{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:11px}
+.kvl{display:flex;flex-direction:column;gap:8px}
+.kvr{display:flex;justify-content:space-between;align-items:center}
+.kvlbl{color:#8b949e;font-size:10px}
+.kvval{font-size:11px}
+.crow{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid #1e2d40}
+.crow:last-child{border-bottom:none}
+.cl{display:flex;align-items:center;gap:7px}
+.cr{display:flex;gap:12px;align-items:center}
+.green{color:#00ff88}.yellow{color:#f0c040}.red{color:#ff4466}.blue{color:#4dc3ff}
+</style>
+</head>
+<body>
+
+<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+  <div>
+    <div class="green" style="font-size:16px;font-weight:700;letter-spacing:.04em">&#x2B21; HOMESERVER</div>
+    <div style="color:#8b949e;font-size:10px;margin-top:3px">192.168.1.12 &middot; Ubuntu 24.04.4 LTS</div>
+  </div>
+  <div style="text-align:right">
+    <div id="clk" class="green" style="font-size:20px;font-weight:700">--:--:--</div>
+    <div id="dt" style="color:#8b949e;font-size:9px;margin-top:2px">&mdash;</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="chdr">
+    <span class="cdot">&#9632;</span><span class="ctxt">System Health</span><div class="cline"></div>
+    <span class="green" style="font-size:9px">&#9679; LIVE</span>
+  </div>
+  <div class="gauges">
+    <div class="gw">
+      <div class="grel">
+        <svg width="80" height="80" viewBox="0 0 80 80" style="transform:rotate(-90deg);display:block">
+          <circle cx="40" cy="40" r="32" fill="none" stroke="#21262d" stroke-width="7"/>
+          <circle id="g-cpu" cx="40" cy="40" r="32" fill="none" stroke="#00ff88" stroke-width="7" stroke-dasharray="201.06" stroke-dashoffset="201.06" stroke-linecap="round" style="transition:all .6s ease"/>
+        </svg>
+        <div class="gcen"><span id="v-cpu" class="gval green">&mdash;%</span></div>
+      </div>
+      <span class="glbl">CPU</span>
+    </div>
+    <div class="gw">
+      <div class="grel">
+        <svg width="80" height="80" viewBox="0 0 80 80" style="transform:rotate(-90deg);display:block">
+          <circle cx="40" cy="40" r="32" fill="none" stroke="#21262d" stroke-width="7"/>
+          <circle id="g-ram" cx="40" cy="40" r="32" fill="none" stroke="#00ff88" stroke-width="7" stroke-dasharray="201.06" stroke-dashoffset="201.06" stroke-linecap="round" style="transition:all .6s ease"/>
+        </svg>
+        <div class="gcen"><span id="v-ram" class="gval green">&mdash;%</span></div>
+      </div>
+      <span class="glbl">Memory</span>
+    </div>
+    <div class="gw">
+      <div class="grel">
+        <svg width="80" height="80" viewBox="0 0 80 80" style="transform:rotate(-90deg);display:block">
+          <circle cx="40" cy="40" r="32" fill="none" stroke="#21262d" stroke-width="7"/>
+          <circle id="g-disk" cx="40" cy="40" r="32" fill="none" stroke="#00ff88" stroke-width="7" stroke-dasharray="201.06" stroke-dashoffset="201.06" stroke-linecap="round" style="transition:all .6s ease"/>
+        </svg>
+        <div class="gcen"><span id="v-disk" class="gval green">&mdash;%</span></div>
+      </div>
+      <span class="glbl">Disk</span>
+    </div>
+    <div class="gw">
+      <div class="grel">
+        <svg width="80" height="80" viewBox="0 0 80 80" style="transform:rotate(-90deg);display:block">
+          <circle cx="40" cy="40" r="32" fill="none" stroke="#21262d" stroke-width="7"/>
+          <circle id="g-temp" cx="40" cy="40" r="32" fill="none" stroke="#00ff88" stroke-width="7" stroke-dasharray="201.06" stroke-dashoffset="201.06" stroke-linecap="round" style="transition:all .6s ease"/>
+        </svg>
+        <div class="gcen"><span id="v-temp" class="gval green">&mdash;&deg;C</span></div>
+      </div>
+      <span class="glbl">Temp</span>
+    </div>
+  </div>
+  <div class="srow">
+    <div class="spill"><div class="slbl">Load</div><div id="v-load" class="sval">&mdash;</div></div>
+    <div class="spill"><div class="slbl">Uptime</div><div id="v-uptime" class="sval">&mdash;</div></div>
+    <div class="spill"><div class="slbl">Procs</div><div id="v-procs" class="sval">&mdash;</div></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="chdr"><span class="cdot">&#9632;</span><span class="ctxt">Trend &middot; last few min</span></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+    <div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+        <span class="glbl">CPU</span><span id="spark-cpu-now" class="green" style="font-size:10px">&mdash;</span>
+      </div>
+      <svg viewBox="0 0 100 30" preserveAspectRatio="none" style="width:100%;height:38px;display:block;background:#070b11;border-radius:4px">
+        <polyline id="spark-cpu" fill="none" stroke="#00ff88" stroke-width="1.5" points=""/>
+      </svg>
+    </div>
+    <div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+        <span class="glbl">Memory</span><span id="spark-ram-now" class="blue" style="font-size:10px">&mdash;</span>
+      </div>
+      <svg viewBox="0 0 100 30" preserveAspectRatio="none" style="width:100%;height:38px;display:block;background:#070b11;border-radius:4px">
+        <polyline id="spark-ram" fill="none" stroke="#4dc3ff" stroke-width="1.5" points=""/>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<div class="tc">
+  <div class="card" style="margin-bottom:0">
+    <div class="chdr"><span class="cdot">&#9632;</span><span class="ctxt">Network</span></div>
+    <div class="kvl">
+      <div class="kvr"><span class="kvlbl">VPN</span><span id="v-vpn" class="kvval red" style="font-weight:700">&#9679; OFFLINE</span></div>
+      <div class="kvr"><span class="kvlbl">Local IP</span><span class="kvval green">192.168.1.12</span></div>
+      <div class="kvr"><span class="kvlbl">Iface</span><span class="kvval">wlp1s0</span></div>
+      <div class="kvr"><span class="kvlbl">Throughput</span><span class="kvval"><span class="green">&darr;</span> <span id="v-down">0</span> <span style="color:#8b949e">/</span> <span class="blue">&uarr;</span> <span id="v-up">0</span> <span style="color:#8b949e;font-size:9px">KB/s</span></span></div>
+      <div class="kvr"><span class="kvlbl">Kernel</span><span class="kvval" style="font-size:9px">6.8.0-124-generic</span></div>
+    </div>
+  </div>
+  <div class="card" style="margin-bottom:0">
+    <div class="chdr"><span class="cdot">&#9632;</span><span class="ctxt">Hunt Engine</span></div>
+    <div class="kvl">
+      <div class="kvr"><span class="kvlbl">Program</span><span id="v-program" class="kvval blue" style="font-weight:700">&mdash;</span></div>
+      <div class="kvr"><span class="kvlbl">Platform</span><span id="v-platform" class="kvval">&mdash;</span></div>
+      <div class="kvr"><span class="kvlbl">Status</span><span id="v-hunt-status" class="kvval yellow" style="font-weight:700">&#9679; IDLE</span></div>
+      <div class="kvr"><span class="kvlbl">Round</span><span id="v-round" class="kvval" style="font-size:9px">&mdash;</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="chdr"><span class="cdot">&#9632;</span><span class="ctxt">Top Processes</span></div>
+  <div id="proc-list"><div style="color:#8b949e;font-size:11px">Loading...</div></div>
+</div>
+
+<div class="card">
+  <div class="chdr"><span class="cdot">&#9632;</span><span class="ctxt">Cron Jobs</span></div>
+  <div id="cron-list"><div style="color:#8b949e;font-size:11px">Loading...</div></div>
+</div>
+
+<div style="text-align:center;color:#21262d;font-size:8px;letter-spacing:.1em">
+  REFRESH 5s &middot; joshuadanielca@homeserver &middot; HOMESERVER DASHBOARD
+</div>
+
+<script>
+var CIRC = 201.06;
+
+function setGauge(id, val, max, unit) {
+  var pct   = Math.min(val, max) / max;
+  var color = pct < 0.6 ? '#00ff88' : pct < 0.8 ? '#f0c040' : '#ff4466';
+  var g = document.getElementById('g-' + id);
+  var v = document.getElementById('v-' + id);
+  if (g) { g.style.strokeDashoffset = CIRC * (1 - pct); g.style.stroke = color; }
+  if (v) { v.textContent = val + unit; v.style.color = color; }
+}
+
+function drawSpark(id, data) {
+  if (!data || data.length < 2) return;
+  var w = 100, h = 30, max = 100;
+  var pts = data.map(function(val, i) {
+    var x = (i / (data.length - 1)) * w;
+    var y = h - (Math.min(val, max) / max) * h;
+    return x.toFixed(1) + ',' + y.toFixed(1);
+  }).join(' ');
+  var el = document.getElementById(id);
+  if (el) el.setAttribute('points', pts);
+}
+
+function tick() {
+  var n = new Date();
+  document.getElementById('clk').textContent = n.toLocaleTimeString('en-CA', {hour12: false});
+  document.getElementById('dt').textContent  = n.toLocaleDateString('en-CA', {weekday:'short', month:'short', day:'numeric', year:'numeric'});
+}
+
+function fetchStats() {
+  fetch('/api/stats').then(function(r){ return r.json(); }).then(function(d) {
+    setGauge('cpu',  d.cpu,  100, '%');
+    setGauge('ram',  d.ram,  100, '%');
+    setGauge('disk', d.disk, 100, '%');
+    if (d.temp !== null && d.temp !== undefined) {
+      setGauge('temp', d.temp, 90, '\u00b0C');
+    } else {
+      var vt = document.getElementById('v-temp');
+      if (vt) vt.textContent = 'N/A';
+    }
+    document.getElementById('v-load').textContent   = d.load;
+    document.getElementById('v-uptime').textContent = d.uptime;
+    document.getElementById('v-procs').textContent  = d.procs;
+    document.getElementById('v-down').textContent   = d.down_kbps;
+    document.getElementById('v-up').textContent     = d.up_kbps;
+    drawSpark('spark-cpu', d.history_cpu);
+    drawSpark('spark-ram', d.history_ram);
+    document.getElementById('spark-cpu-now').textContent = d.cpu + '%';
+    document.getElementById('spark-ram-now').textContent = d.ram + '%';
+  }).catch(function() {});
+}
+
+function fetchProcs() {
+  fetch('/api/procs').then(function(r){ return r.json(); }).then(function(list) {
+    var html = '';
+    if (!list || !list.length) { html = '<div style="color:#8b949e;font-size:11px">No data</div>'; }
+    for (var i = 0; i < list.length; i++) {
+      var p  = list[i];
+      var bb = i < list.length - 1 ? '1px solid #1e2d40' : 'none';
+      html += '<div class="crow" style="border-bottom:' + bb + '">' +
+                '<div class="cl"><span style="font-size:12px">' + p.name + '</span></div>' +
+                '<div class="cr">' +
+                  '<span class="green" style="font-size:10px">' + p.cpu + '% cpu</span>' +
+                  '<span style="color:#8b949e;font-size:10px">' + p.mem + '% mem</span>' +
+                '</div>' +
+              '</div>';
+    }
+    document.getElementById('proc-list').innerHTML = html;
+  }).catch(function() {});
+}
+
+function fetchVPN() {
+  fetch('/api/vpn').then(function(r){ return r.json(); }).then(function(d) {
+    var el = document.getElementById('v-vpn');
+    if (d.active) {
+      el.textContent = '\u25cf ACTIVE' + (d.interface ? ' (' + d.interface + ')' : '');
+      el.className   = 'kvval green';
+    } else {
+      el.textContent = '\u25cf OFFLINE';
+      el.className   = 'kvval red';
+    }
+  }).catch(function() {});
+}
+
+function fetchHunt() {
+  fetch('/api/hunt').then(function(r){ return r.json(); }).then(function(d) {
+    document.getElementById('v-program').textContent  = d.program  || '\u2014';
+    document.getElementById('v-platform').textContent = d.platform || '\u2014';
+    document.getElementById('v-round').textContent    = d.round    || '\u2014';
+    var el = document.getElementById('v-hunt-status');
+    if (d.status === 'running') {
+      el.textContent = '\u25cf RUNNING'; el.className = 'kvval green';
+    } else {
+      el.textContent = '\u25cf IDLE';    el.className = 'kvval yellow';
+    }
+  }).catch(function() {});
+}
+
+function fetchCrons() {
+  fetch('/api/crons').then(function(r){ return r.json(); }).then(function(jobs) {
+    var html = '';
+    for (var i = 0; i < jobs.length; i++) {
+      var j  = jobs[i];
+      var dc = j.status === 'ok' ? '#00ff88' : j.status === 'stale' ? '#f0c040' : '#ff4466';
+      var bb = i < jobs.length - 1 ? '1px solid #1e2d40' : 'none';
+      html  += '<div class="crow" style="border-bottom:' + bb + '">' +
+                 '<div class="cl">' +
+                   '<span style="color:' + dc + ';font-size:9px">\u25cf</span>' +
+                   '<span style="font-size:12px">' + j.name + '</span>' +
+                 '</div>' +
+                 '<div class="cr">' +
+                   '<span style="color:#8b949e;font-size:9px">' + j.schedule + '</span>' +
+                   '<span style="color:' + dc + ';font-size:10px">' + j.last_run + '</span>' +
+                 '</div>' +
+               '</div>';
+    }
+    document.getElementById('cron-list').innerHTML = html;
+  }).catch(function() {});
+}
+
+function refresh() {
+  fetchStats();
+  fetchProcs();
+  fetchVPN();
+  fetchHunt();
+  fetchCrons();
+}
+
+tick();
+setInterval(tick, 1000);
+refresh();
+setInterval(refresh, 5000);
+</script>
+</body>
+</html>
