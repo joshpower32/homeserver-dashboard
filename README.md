@@ -1,4 +1,9 @@
 # Homeserver Dashboard
+Homeserver Dashboard is a self-hosted web app that monitors a 24/7 Ubuntu server in real time — CPU, memory, disk, temperature, network throughput, running processes, scheduled jobs, and VPN status — and pushes phone alerts the moment something goes wrong (disk fills up, VPN drops, a scheduled job stops running). I built it to keep an eye on the infrastructure that runs my automated security research without having to SSH in to check.
+
+How to use it: clone the repo, install Flask and psutil, set your ntfy topic in config.py, then either run python3 dashboard.py or install it as a systemd service so it auto-starts on boot. Open http://<your-server-ip>:5000 in any browser on your local network. Add the monitor script to cron for push alerts.
+
+
 
 A lightweight, real-time monitoring dashboard for a self-hosted Linux 
 server. Built to keep an eye on a 24/7 Ubuntu box at a glance — system 
